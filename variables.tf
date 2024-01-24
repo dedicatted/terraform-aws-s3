@@ -16,6 +16,18 @@ variable "create_s3_user" {
   description = "IAM user to access s3 bucket."
 }
 
+variable "create_s3_role" {
+  type        = bool
+  default     = true
+  description = "IAM role to access s3 bucket."
+}
+
+variable "service_principal" {
+  type        = string
+  default     = "ec2.amazonaws.com"
+  description = "Service that will assume this role if needed."
+}
+
 variable "additional_allowed_users" {
   type        = list(string)
   default     = []

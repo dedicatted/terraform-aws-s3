@@ -41,3 +41,24 @@ resource "aws_ssm_parameter" "secret_key" {
   type  = "SecureString"
   value = aws_iam_access_key.accessKeys[count.index].secret
 }
+
+resource "aws_iam_role" "s3_access_role" {
+  count = var.create_s3_role ? 1 : 0
+  name  = "s3_access_role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Action = "sts:AssumeRole",
+      Effect = "Allow",
+      Principal = {
+        Service = var.service_principal
+      }
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "s3_role_policy_attachment" {
+  count      = var.create_s3_role ? 1 : 0
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+  role       = aws_iam_role.s3_access_role[count.index].name
+}

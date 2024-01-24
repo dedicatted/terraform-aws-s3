@@ -31,7 +31,12 @@ resource "aws_s3_bucket_policy" "general_s3_policy" {
       {
         Effect = "Allow",
         Principal = {
-          AWS = concat([aws_iam_user.user[count.index].arn, data.aws_caller_identity.current.arn], var.additional_allowed_users)
+          AWS = concat(
+            var.create_s3_user ? [aws_iam_user.user[count.index].arn] : [],
+            var.create_s3_role ? [aws_iam_role.s3_access_role[count.index].arn] : [],
+            [data.aws_caller_identity.current.arn],
+            var.additional_allowed_users
+          )
         },
         Action   = "s3:*",
         Resource = ["${aws_s3_bucket.bucket.arn}/*", "${aws_s3_bucket.bucket.arn}"]
@@ -39,7 +44,12 @@ resource "aws_s3_bucket_policy" "general_s3_policy" {
       {
         Effect = "Deny",
         NotPrincipal = {
-          AWS = concat([aws_iam_user.user[count.index].arn, data.aws_caller_identity.current.arn], var.additional_allowed_users)
+          AWS = concat(
+            var.create_s3_user ? [aws_iam_user.user[count.index].arn] : [],
+            var.create_s3_role ? [aws_iam_role.s3_access_role[count.index].arn] : [],
+            [data.aws_caller_identity.current.arn],
+            var.additional_allowed_users
+          )
         },
         Action   = "s3:*",
         Resource = ["${aws_s3_bucket.bucket.arn}/*", "${aws_s3_bucket.bucket.arn}"]
