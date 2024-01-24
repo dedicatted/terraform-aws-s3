@@ -13,13 +13,13 @@ variable "force_destroy" {
 variable "create_s3_user" {
   type        = bool
   default     = true
-  description = "IAM user to access s3 bucket"
+  description = "IAM user to access s3 bucket."
 }
 
 variable "additional_allowed_users" {
   type        = list(string)
-  default     = ["arn:aws:iam::338096867149:user/danylo_safankov"]
-  description = "IAM users to grant access to s3 bucket"
+  default     = []
+  description = "Additional IAM users to grant access to s3 bucket."
 }
 
 variable "s3_lifecycle_rule_prefix" {
@@ -67,5 +67,5 @@ variable "mfa_delete" {
 variable "logs_target_bucket" {
   type        = string
   default     = ""
-  description = "Target bucket to store access logs"
+  description = "Target bucket to store access logs."
 }

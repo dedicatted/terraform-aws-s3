@@ -6,12 +6,47 @@ The `terraform-aws-s3` module includes configuration to easily deploy AWS S3.
 
 ## Usage
 
-General configuration that deploys s3 bucket with bucket policy and iam user that is allowed to access s3.
+Configuration that deploys s3 bucket with bucket policy and iam user that is allowed to access s3. You can find iam access kyes in AWS Parameter Store.
+```hcl
+module "s3" {
+  source = "github.com/dedicatted/terraform-aws-s3"
+}
+```
 
+Configuration to enable static website hosting
+```hcl
+module "s3" {
+  source                 = "github.com/dedicatted/terraform-aws-s3"
+  website_index_document = "index.html"
+}
+```
+
+Configuration to apply lifecycle rules
+```hcl
+module "s3" {
+  source                   = "github.com/dedicatted/terraform-aws-s3"
+  s3_lifecycle_rule_prefix = ["dev/archive", "prod/archive"]
+  s3_item_expiry_folder    = ["1", "30"]
+}
+```
+
+Configuration to enable server access logging. Bucket for logs should be pre-created according to `https://docs.aws.amazon.com/AmazonS3/latest/userguide/enable-server-access-logging.html`
 ```hcl
 module "s3" {
   source             = "github.com/dedicatted/terraform-aws-s3"
+  logs_target_bucket = "<target_bucket>"
 }
+```
+
+Configuration to enable versioning.
+```hcl
+module "s3" {
+  source     = "github.com/dedicatted/terraform-aws-s3"
+  versioning = "Enabled"
+  mfa_delete = "Disabled"
+}
+```
+
 ## Requirements
 
 No requirements.
@@ -50,11 +85,11 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_additional_allowed_users"></a> [additional\_allowed\_users](#input\_additional\_allowed\_users) | IAM users to grant access to s3 bucket | `list(string)` | <pre>[<br>  "arn:aws:iam::338096867149:user/danylo_safankov"<br>]</pre> | no |
+| <a name="input_additional_allowed_users"></a> [additional\_allowed\_users](#input\_additional\_allowed\_users) | Additional IAM users to grant access to s3 bucket. | `list(string)` | `[]` | no |
 | <a name="input_bucket_name"></a> [bucket\_name](#input\_bucket\_name) | Name of the bucket. | `string` | `"dedicatted-abcdefg"` | no |
-| <a name="input_create_s3_user"></a> [create\_s3\_user](#input\_create\_s3\_user) | IAM user to access s3 bucket | `bool` | `true` | no |
+| <a name="input_create_s3_user"></a> [create\_s3\_user](#input\_create\_s3\_user) | IAM user to access s3 bucket. | `bool` | `true` | no |
 | <a name="input_force_destroy"></a> [force\_destroy](#input\_force\_destroy) | Boolean that indicates all objects (including any locked objects) should be deleted from the bucket when the bucket is destroyed so that the bucket can be destroyed without error. | `bool` | `true` | no |
-| <a name="input_logs_target_bucket"></a> [logs\_target\_bucket](#input\_logs\_target\_bucket) | Target bucket to store access logs | `string` | `""` | no |
+| <a name="input_logs_target_bucket"></a> [logs\_target\_bucket](#input\_logs\_target\_bucket) | Target bucket to store access logs. | `string` | `""` | no |
 | <a name="input_mfa_delete"></a> [mfa\_delete](#input\_mfa\_delete) | Specifies whether MFA delete is enabled in the bucket versioning configuration. Valid values: Enabled or Disabled. | `string` | `""` | no |
 | <a name="input_s3_item_expiry_folder"></a> [s3\_item\_expiry\_folder](#input\_s3\_item\_expiry\_folder) | S3 lifecycle rules expiration days. | `list(string)` | `[]` | no |
 | <a name="input_s3_lifecycle_rule_prefix"></a> [s3\_lifecycle\_rule\_prefix](#input\_s3\_lifecycle\_rule\_prefix) | S3 lifecycle rules prefixes. | `list(string)` | `[]` | no |

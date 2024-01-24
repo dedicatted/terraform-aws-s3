@@ -118,15 +118,3 @@ resource "aws_s3_bucket_logging" "example" {
   target_prefix = "logs/"
 }
 
-
-
-# <<EOF
-# [{
-#     "Condition": {
-#         "KeyPrefixEquals": "docs/"
-#     },
-#     "Redirect": {
-#         "ReplaceKeyPrefixWith": ""
-#     }
-# }]
-# EOF
