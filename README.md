@@ -9,7 +9,8 @@ The `terraform-aws-s3` module includes configuration to easily deploy AWS S3.
 Configuration that deploys s3 bucket.
 ```hcl
 module "s3" {
-  source = "github.com/dedicatted/terraform-aws-s3"
+  source      = "github.com/dedicatted/terraform-aws-s3"
+  bucket_name = "<bucket_name>"
 }
 ```
 

@@ -1,6 +1,6 @@
 resource "aws_iam_user" "user" {
   count = var.create_s3_user ? 1 : 0
-  name  = "${var.bucket_name}-s3-user"
+  name  = "${aws_s3_bucket.bucket.bucket}-s3-user"
   path  = "/"
 }
 
@@ -11,7 +11,7 @@ resource "aws_iam_access_key" "accessKeys" {
 
 resource "aws_iam_user_policy" "policy" {
   count = var.create_s3_user ? 1 : 0
-  name  = "${var.bucket_name}-iam-policy"
+  name  = "${aws_s3_bucket.bucket.bucket}-iam-policy"
   user  = aws_iam_user.user[count.index].name
 
   policy = <<EOF

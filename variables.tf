@@ -1,7 +1,13 @@
 variable "bucket_name" {
   type        = string
-  default     = "dedicatted-abcdefg"
+  default     = "dedicatted"
   description = "Name of the bucket."
+}
+
+variable "random_prefix" {
+  type        = bool
+  default     = true
+  description = "Whether to add random prefix to s3 bucket name"
 }
 
 variable "force_destroy" {
@@ -12,13 +18,13 @@ variable "force_destroy" {
 
 variable "create_s3_user" {
   type        = bool
-  default     = true
+  default     = false
   description = "IAM user to access s3 bucket."
 }
 
 variable "create_s3_role" {
   type        = bool
-  default     = true
+  default     = false
   description = "IAM role to access s3 bucket."
 }
 

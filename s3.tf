@@ -1,7 +1,12 @@
 data "aws_caller_identity" "current" {}
 
+resource "random_string" "bucket_name_prefix" {
+  length  = 6
+  special = false
+}
+
 resource "aws_s3_bucket" "bucket" {
-  bucket        = var.bucket_name
+  bucket        = var.random_prefix ? format("%s-%s", var.bucket_name, lower(random_string.bucket_name_prefix.result)) : var.bucket_name
   force_destroy = var.force_destroy
 }
 
